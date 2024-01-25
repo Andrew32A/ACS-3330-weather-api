@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import DisplayWeather from "./DisplayWeather";
 
 function Weather() {
   const [zip, setZip] = useState("");
@@ -28,7 +29,7 @@ function Weather() {
       const response = await fetch(url);
       const data = await response.json();
 
-      if (response.ok) {
+      if (data.cod === 200) {
         setWeatherData(data);
       } else {
         throw new Error(data.message || "Error fetching weather data");
@@ -61,15 +62,7 @@ function Weather() {
 
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {weatherData && (
-        <div>
-          <h2>{weatherData.name} Weather</h2>
-          <p>
-            Temperature: {weatherData.main.temp}°{unit === "metric" ? "C" : "F"}
-          </p>
-          <p>Condition: {weatherData.weather[0].main}</p>
-        </div>
-      )}
+      {weatherData && <DisplayWeather weatherData={weatherData} unit={unit} />}
     </div>
   );
 }
