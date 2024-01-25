@@ -1,0 +1,26 @@
+.weather-info {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.weather-info img {
+  width: 50px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.weather-info h2 {
+  margin: 10px 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.weather-info p {
+  color: #555;
+  font-size: 1em;
+  margin: 5px 0;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DisplayWeather from "./DisplayWeather";
+import "./Weather.css";
 
 function Weather() {
   const [zip, setZip] = useState("");
@@ -43,25 +44,28 @@ function Weather() {
   };
 
   return (
-    <div>
-      <h1>Weather</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="weather-container">
+      <h1 className="weather-title">Weather</h1>
+      <form onSubmit={handleSubmit} className="weather-form">
         <input
           type="text"
           value={zip}
           onChange={updateZip}
           placeholder="Enter zip code"
-          pattern="^\d{5}$" // regex to make sure it's a 5 digit number
+          pattern="^\d{5}$"
+          className="zip-input"
         />
-        <select value={unit} onChange={updateUnit}>
+        <select value={unit} onChange={updateUnit} className="unit-select">
           <option value="metric">Celsius</option>
           <option value="imperial">Fahrenheit</option>
         </select>
-        <button type="submit">Get Weather</button>
+        <button type="submit" className="submit-btn">
+          Get Weather
+        </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
+      {loading && <p className="loading">Loading...</p>}
+      {error && <p className="error">Error: {error}</p>}
       {weatherData && <DisplayWeather weatherData={weatherData} unit={unit} />}
     </div>
   );
