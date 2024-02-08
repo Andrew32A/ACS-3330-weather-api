@@ -4,7 +4,7 @@ import "./Weather.css";
 
 function Weather() {
   const [zip, setZip] = useState("");
-  const [unit, setUnit] = useState("imperial"); // cause im american, imperical by default. could also be metric
+  const [unit, setUnit] = useState("imperial"); // because I'm American, imperial by default. Could also be metric
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
@@ -17,13 +17,7 @@ function Weather() {
     setUnit(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!zip) return;
-
-    const apiKey = process.env.REACT_APP_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip},us&units=${unit}&appid=${apiKey}`;
-
+  const fetchWeather = async (url) => {
     try {
       setLoading(true);
       setError(null);
@@ -41,6 +35,34 @@ function Weather() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!zip) return;
+
+    const apiKey = process.env.REACT_APP_API_KEY;
+    const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip},us&units=${unit}&appid=${apiKey}`;
+    fetchWeather(url);
+  };
+
+  const handleGeolocationWeather = () => {
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        const apiKey = process.env.REACT_APP_API_KEY;
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=${unit}&appid=${apiKey}`;
+        fetchWeather(url);
+      },
+      () => {
+        setError("Unable to retrieve your location");
+      }
+    );
   };
 
   return (
@@ -61,6 +83,13 @@ function Weather() {
         </select>
         <button type="submit" className="submit-btn">
           Get Weather
+        </button>
+        <button
+          type="button"
+          onClick={handleGeolocationWeather}
+          className="geo-btn"
+        >
+          Get Weather By Location
         </button>
       </form>
 
